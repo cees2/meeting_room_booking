@@ -3,7 +3,7 @@ package com.booking.demo.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="Rooms")
+@Table(name="room")
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
