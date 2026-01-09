@@ -1,10 +1,11 @@
 package com.booking.demo.controller;
 
+import com.booking.demo.dto.request.UpdateRoomRequest;
 import com.booking.demo.entity.Room;
 import com.booking.demo.service.RoomService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,8 +18,25 @@ public class RoomController {
         this.roomService = roomService;
     }
 
-    @GetMapping("")
-    public List<Room> getAllRooms(){
+    @GetMapping
+    public List<Room> getAllRooms() {
         return roomService.getRooms();
+    }
+
+    @GetMapping("/{roomID}")
+    public Room getRoomById(@PathVariable int roomID) {
+        return roomService.getRoomById(roomID);
+    }
+
+    @PostMapping
+    public Room createRoom(@RequestBody Room room) {
+        return roomService.createRoom(room);
+    }
+
+    @PatchMapping("/{roomID}")
+    public ResponseEntity<Room> updateRoom(@PathVariable int roomID, @RequestBody UpdateRoomRequest room) {
+        Room updatedRoom = roomService.updateRoom(roomID, room);
+
+        return ResponseEntity.ok(updatedRoom);
     }
 }

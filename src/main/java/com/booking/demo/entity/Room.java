@@ -1,6 +1,8 @@
 package com.booking.demo.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name="room")
@@ -9,10 +11,13 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="ID")
     public int id;
+    @NotEmpty
     @Column(name="Name")
     public String name;
+    @Min(1)
     @Column(name="Capacity")
     public int capacity;
+    @NotEmpty
     @Column(name="Location")
     public String location;
 
