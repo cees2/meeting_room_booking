@@ -4,7 +4,6 @@ import com.booking.demo.dto.request.UpdateRoomRequest;
 import com.booking.demo.entity.Room;
 import com.booking.demo.service.RoomService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,5 +37,12 @@ public class RoomController {
         Room updatedRoom = roomService.updateRoom(roomID, room);
 
         return ResponseEntity.ok(updatedRoom);
+    }
+
+    @DeleteMapping("/{roomID}")
+    public ResponseEntity<Void> deleteRoom(@PathVariable int roomID){
+        roomService.removeRoom(roomID);
+
+        return ResponseEntity.noContent().build();
     }
 }

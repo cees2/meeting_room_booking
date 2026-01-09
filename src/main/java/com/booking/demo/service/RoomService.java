@@ -5,7 +5,7 @@ import com.booking.demo.entity.Room;
 import com.booking.demo.repository.RoomRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -31,5 +31,10 @@ public class RoomService {
     @Transactional
     public Room updateRoom(int roomID, UpdateRoomRequest room) {
         return roomRepository.updateRoom(roomID, room);
+    }
+
+    @Transactional
+    public void removeRoom(@PathVariable int roomID){
+        roomRepository.removeRoom(roomID);
     }
 }

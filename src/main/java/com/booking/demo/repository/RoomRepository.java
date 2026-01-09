@@ -7,7 +7,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -50,5 +50,15 @@ public class RoomRepository {
         }
 
         return roomToBeUpdated;
+    }
+
+    public void removeRoom(@PathVariable int roomID){
+        Room roomToBeDeleted = entityManager.find(Room.class, roomID);
+
+        if(roomToBeDeleted == null){
+            throw new EntityNotFoundException("Room with ID: " + roomID + " could not be found");
+        }
+
+        entityManager.remove(roomToBeDeleted);
     }
 }
