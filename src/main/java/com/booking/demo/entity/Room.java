@@ -9,16 +9,16 @@ import jakarta.validation.constraints.NotEmpty;
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="ID")
-    public int id;
+    @Column(name="id")
+    public Integer id;
     @NotEmpty
-    @Column(name="Name")
+    @Column(name="name")
     public String name;
     @Min(1)
-    @Column(name="Capacity")
+    @Column(name="capacity")
     public int capacity;
     @NotEmpty
-    @Column(name="Location")
+    @Column(name="location")
     public String location;
 
     public Room() {
@@ -30,11 +30,11 @@ public class Room {
         this.location = location;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
