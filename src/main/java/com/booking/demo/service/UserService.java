@@ -1,5 +1,6 @@
 package com.booking.demo.service;
 
+import com.booking.demo.dto.request.UpdateUserRequest;
 import com.booking.demo.entity.User;
 import com.booking.demo.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -26,5 +27,15 @@ public class UserService {
     @Transactional
     public User createUser(User user){
         return userRepository.createUser(user);
+    }
+
+    @Transactional
+    public User updateUser(int userID, UpdateUserRequest user){
+        return userRepository.updateUser(userID, user);
+    }
+
+    @Transactional
+    public void deleteUser(int userID){
+         userRepository.deleteUser(userID);
     }
 }

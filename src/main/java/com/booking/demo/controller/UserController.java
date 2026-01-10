@@ -1,7 +1,9 @@
 package com.booking.demo.controller;
 
+import com.booking.demo.dto.request.UpdateUserRequest;
 import com.booking.demo.entity.User;
 import com.booking.demo.service.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,5 +30,19 @@ public class UserController {
     @PostMapping
     public User createUser(@RequestBody User user){
         return userService.createUser(user);
+    }
+
+    @PatchMapping("/{userID}")
+    public ResponseEntity<User> updateUser(@PathVariable int userID, @RequestBody UpdateUserRequest user){
+        User updatedUser = userService.updateUser(userID,user);
+
+        return ResponseEntity.ok(updatedUser);
+    }
+
+    @DeleteMapping("/{userID}")
+    public ResponseEntity<Void> deleteUser(@PathVariable int userID){
+        userService.deleteUser(userID);
+
+        return ResponseEntity.noContent().build();
     }
 }
