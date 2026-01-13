@@ -1,6 +1,7 @@
 package com.booking.demo.service;
 
 import com.booking.demo.dto.request.CreateBookingRequest;
+import com.booking.demo.dto.request.UpdateBookingRequest;
 import com.booking.demo.entity.Booking;
 import com.booking.demo.entity.Room;
 import com.booking.demo.entity.User;
@@ -34,37 +35,38 @@ public class BookingService {
         int roomID = createBookingRequest.room_id();
         int userID = createBookingRequest.user_id();
 
-        Room room = roomRepository.getRoomById(roomID);
-        User user = userRepository.getUserById(userID);
+        Room room = roomRepository.findById(roomID).orElseThrow(() -> new EntityNotFoundException("Could not find the user with ID: " + userID));
+        User user = userRepository.findById(userID).orElseThrow(() -> new EntityNotFoundException("Could not find the room with ID: " + roomID));
 
-        if (user == null) {
-            throw new EntityNotFoundException("Could not find the user with ID: " + userID);
-        }
+        Booking booking = bookingMapper.createBookingFromRequest(createBookingRequest, user, room);
 
-        if (room == null) {
-            throw new EntityNotFoundException("Could not find the room with ID: " + roomID);
-        }
-
-        Booking booking = bookingMapper.toEntity(createBookingRequest, user, room);
-
-        return bookingRepository.createBooking(booking);
+        return bookingRepository.save(booking);
     }
 
-    public List<Booking> getAllBookings(){
-        return bookingRepository.getAllBookings();
+    public List<Booking> getAllBookings() {
+        return bookingRepository.findAll();
     }
 
-    public Booking getBookingByID(int bookingID){
-        return bookingRepository.getBookingByID(bookingID);
+    public Booking getBookingByID(int bookingID) {
+        return bookingRepository.findById(bookingID).orElseThrow(() -> new EntityNotFoundException("Could not find the booking with given ID"));
     }
 
     @Transactional
-    public Booking updateBooking(int bookingID, Booking booking){
-        return bookingRepository.updateBooking(bookingID, booking);
+    public Booking updateBooking(int bookingID, UpdateBookingRequest booking) {
+        Booking bookingToBeUpdated = bookingRepository.findById(bookingID).orElseThrow(() -> new EntityNotFoundException("Could not find the booking with given ID"));
+        int roomID = booking.room_id();
+        int userID = booking.user_id();
+
+        Room room = roomRepository.findById(roomID).orElseThrow(() -> new EntityNotFoundException("Could not find the user with ID: " + userID));
+        User user = userRepository.findById(userID).orElseThrow(() -> new EntityNotFoundException("Could not find the room with ID: " + roomID));
+
+        return bookingMapper.updateBookingFromRequest(booking, bookingToBeUpdated, user, room);
     }
 
     @Transactional
-    public void deleteBooking(int bookingID){
-        bookingRepository.deleteBooking(bookingID);
+    public void deleteBooking(int bookingID) {
+        Booking bookingToBeRemoved = bookingRepository.findById(bookingID).orElseThrow(() -> new EntityNotFoundException("Could not find the booking with given ID"));
+
+        bookingRepository.delete(bookingToBeRemoved);
     }
 }

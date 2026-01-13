@@ -1,6 +1,7 @@
 package com.booking.demo.controller;
 
 import com.booking.demo.dto.request.CreateBookingRequest;
+import com.booking.demo.dto.request.UpdateBookingRequest;
 import com.booking.demo.entity.Booking;
 import com.booking.demo.service.BookingService;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,7 @@ public class BookingController {
     }
 
     @PatchMapping("/{bookingID}")
-    public Booking updateBooking(@PathVariable int bookingID, @RequestBody Booking booking){
+    public Booking updateBooking(@PathVariable int bookingID, @RequestBody UpdateBookingRequest booking){
         return bookingService.updateBooking(bookingID, booking);
     }
 

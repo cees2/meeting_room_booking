@@ -7,7 +7,7 @@ public record CreateBookingRequest(
         LocalDateTime endTime,
         String purpose,
         String status,
-        int user_id,
-        int room_id
+        Integer user_id,
+        Integer room_id
 ) {
 }
