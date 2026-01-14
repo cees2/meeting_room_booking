@@ -4,6 +4,7 @@ import com.booking.demo.dto.request.CreateBookingRequest;
 import com.booking.demo.dto.request.UpdateBookingRequest;
 import com.booking.demo.entity.Booking;
 import com.booking.demo.service.BookingService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class BookingController {
     }
 
     @PostMapping
-    public Booking createBooking(@RequestBody CreateBookingRequest createBookingRequest){
+    public Booking createBooking(@Valid @RequestBody CreateBookingRequest createBookingRequest){
         return bookingService.createBooking(createBookingRequest);
     }
 

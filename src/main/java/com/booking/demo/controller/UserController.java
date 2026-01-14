@@ -3,6 +3,7 @@ package com.booking.demo.controller;
 import com.booking.demo.dto.request.UpdateUserRequest;
 import com.booking.demo.entity.User;
 import com.booking.demo.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +29,7 @@ public class UserController {
     }
 
     @PostMapping
-    public User createUser(@RequestBody User user){
+    public User createUser(@Valid @RequestBody User user){
         return userService.createUser(user);
     }
 

@@ -3,6 +3,7 @@ package com.booking.demo.controller;
 import com.booking.demo.dto.request.UpdateRoomRequest;
 import com.booking.demo.entity.Room;
 import com.booking.demo.service.RoomService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +29,7 @@ public class RoomController {
     }
 
     @PostMapping
-    public Room createRoom(@RequestBody Room room) {
+    public Room createRoom(@Valid @RequestBody Room room) {
         return roomService.createRoom(room);
     }
 

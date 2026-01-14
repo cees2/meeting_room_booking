@@ -1,8 +1,6 @@
 package com.booking.demo.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
@@ -13,22 +11,17 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
-    @NotNull
     @Column(name = "start_time")
     private LocalDateTime startTime;
-    @NotNull
     @Column(name = "end_time")
     private LocalDateTime endTime;
     @Column(name="purpose")
     private String purpose;
-    @NotEmpty
     @Column(name="status")
     private String status;
-    @NotNull
     @JoinColumn(name="user_id")
     @ManyToOne(optional = false)
     private User user;
-    @NotNull
     @JoinColumn(name="room_id")
     @ManyToOne(optional = false)
     private Room room;
