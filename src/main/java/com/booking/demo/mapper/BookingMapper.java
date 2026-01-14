@@ -31,7 +31,7 @@ public class BookingMapper {
 
         if(startTime != null) bookingToBeUpdated.setStartTime(startTime);
         if(endTime != null) bookingToBeUpdated.setEndTime(endTime);
-        if(purpose != null) bookingToBeUpdated.setPurpose(status);
+        if(purpose != null) bookingToBeUpdated.setPurpose(purpose);
         if(status != null) bookingToBeUpdated.setStatus(status);
         if(user != null) bookingToBeUpdated.setUser(user);
         if(room != null) bookingToBeUpdated.setRoom(room);
