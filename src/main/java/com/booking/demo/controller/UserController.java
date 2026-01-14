@@ -1,6 +1,8 @@
 package com.booking.demo.controller;
 
+import com.booking.demo.dto.request.CreateUserRequest;
 import com.booking.demo.dto.request.UpdateUserRequest;
+import com.booking.demo.dto.response.UserResponse;
 import com.booking.demo.entity.User;
 import com.booking.demo.service.UserService;
 import jakarta.validation.Valid;
@@ -19,23 +21,23 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getAllUsers(){
+    public List<UserResponse> getAllUsers(){
         return userService.getAllUsers();
     }
 
     @GetMapping("/{userID}")
-    public User getUserById(@PathVariable int userID){
+    public UserResponse getUserById(@PathVariable int userID){
         return userService.getUserById(userID);
     }
 
     @PostMapping
-    public User createUser(@Valid @RequestBody User user){
+    public UserResponse createUser(@Valid @RequestBody CreateUserRequest user){
         return userService.createUser(user);
     }
 
     @PatchMapping("/{userID}")
-    public ResponseEntity<User> updateUser(@PathVariable int userID, @RequestBody UpdateUserRequest user){
-        User updatedUser = userService.updateUser(userID,user);
+    public ResponseEntity<UserResponse> updateUser(@PathVariable int userID, @RequestBody UpdateUserRequest user){
+        UserResponse updatedUser = userService.updateUser(userID,user);
 
         return ResponseEntity.ok(updatedUser);
     }

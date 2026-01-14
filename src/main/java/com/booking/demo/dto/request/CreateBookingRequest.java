@@ -14,9 +14,9 @@ public record CreateBookingRequest(
         String purpose,
         @NotEmpty
         String status,
-        @NotNull
+        @NotEmpty
         Integer user_id,
-        @NotNull
+        @NotEmpty
         Integer room_id
 ) {
 }
