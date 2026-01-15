@@ -11,13 +11,10 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     public Integer id;
-    @NotEmpty
     @Column(name="name")
     public String name;
-    @Min(1)
     @Column(name="capacity")
     public int capacity;
-    @NotEmpty
     @Column(name="location")
     public String location;
 

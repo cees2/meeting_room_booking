@@ -10,13 +10,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-    @NotEmpty
     @Column(name = "first_name")
     private String firstName;
-    @NotEmpty
     @Column(name = "last_name")
     private String lastName;
-    @NotEmpty
     @Column(name = "email")
     private String email;
 
