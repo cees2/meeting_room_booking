@@ -1,7 +1,8 @@
 package com.booking.demo.controller;
 
+import com.booking.demo.dto.request.CreateRoomRequest;
 import com.booking.demo.dto.request.UpdateRoomRequest;
-import com.booking.demo.entity.Room;
+import com.booking.demo.dto.response.RoomResponse;
 import com.booking.demo.service.RoomService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -19,23 +20,23 @@ public class RoomController {
     }
 
     @GetMapping
-    public List<Room> getAllRooms() {
+    public List<RoomResponse> getAllRooms() {
         return roomService.getRooms();
     }
 
     @GetMapping("/{roomID}")
-    public Room getRoomById(@PathVariable int roomID) {
+    public RoomResponse getRoomById(@PathVariable int roomID) {
         return roomService.getRoomById(roomID);
     }
 
     @PostMapping
-    public Room createRoom(@Valid @RequestBody Room room) {
+    public RoomResponse createRoom(@Valid @RequestBody CreateRoomRequest room) {
         return roomService.createRoom(room);
     }
 
     @PatchMapping("/{roomID}")
-    public ResponseEntity<Room> updateRoom(@PathVariable int roomID, @RequestBody UpdateRoomRequest room) {
-        Room updatedRoom = roomService.updateRoom(roomID, room);
+    public ResponseEntity<RoomResponse> updateRoom(@PathVariable int roomID, @RequestBody UpdateRoomRequest room) {
+        RoomResponse updatedRoom = roomService.updateRoom(roomID, room);
 
         return ResponseEntity.ok(updatedRoom);
     }
