@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -68,5 +69,12 @@ public class GlobalExceptionHandler {
         }
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(apiError);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ApiError> globalDataIntegrityViolationHandler(MethodArgumentTypeMismatchException exception) {
+        ApiError apiError = new ApiError("TYPE_MISMATCH", exception.getMessage());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiError);
     }
 }
