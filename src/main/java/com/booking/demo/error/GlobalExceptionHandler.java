@@ -30,14 +30,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> globalMethodArgumentNotValidHandler(MethodArgumentNotValidException exception) {
-//        List<ValidationError> validationErrors = new ArrayList<>();
+        List<ValidationError> validationErrors = exception.getBindingResult().getFieldErrors().stream().map(fieldError -> {
+            String field = fieldError.getField();
+            String message = fieldError.getDefaultMessage();
 
-//        exception.getBindingResult().getAllErrors().stream().forEach(error ->  {
-//            String field = error.();
-//
-//        });
-        ApiError apiError = new ApiError("VALIDATION_ERROR", "Incorrect input provided");
+            return new ValidationError(field, message);
+        }).toList();
 
+        ApiError apiError = new ApiError("VALIDATION_ERROR", "Incorrect input provided", validationErrors);
 
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(apiError);
     }
