@@ -84,4 +84,16 @@ public class BookingService {
 
         bookingRepository.delete(bookingToBeRemoved);
     }
+
+    public List<BookingResponse> findBookingsByUser(int userID){
+        List<Booking> bookings = bookingRepository.findByUserId(userID);
+
+        return bookings.stream().map(booking -> bookingMapper.toResponse(booking)).toList();
+    }
+
+    public List<BookingResponse> findBookingsByRoom(int userID){
+        List<Booking> bookings = bookingRepository.findByRoomId(userID);
+
+        return bookings.stream().map(booking -> bookingMapper.toResponse(booking)).toList();
+    }
 }

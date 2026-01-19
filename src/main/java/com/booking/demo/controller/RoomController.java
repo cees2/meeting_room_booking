@@ -2,7 +2,9 @@ package com.booking.demo.controller;
 
 import com.booking.demo.dto.request.CreateRoomRequest;
 import com.booking.demo.dto.request.UpdateRoomRequest;
+import com.booking.demo.dto.response.BookingResponse;
 import com.booking.demo.dto.response.RoomResponse;
+import com.booking.demo.service.BookingService;
 import com.booking.demo.service.RoomService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +16,11 @@ import java.util.List;
 @RequestMapping("/rooms")
 public class RoomController {
     private RoomService roomService;
+    private BookingService bookingService;
 
-    public RoomController(RoomService roomService) {
+    public RoomController(RoomService roomService, BookingService bookingService) {
         this.roomService = roomService;
+        this.bookingService = bookingService;
     }
 
     @GetMapping
@@ -42,9 +46,14 @@ public class RoomController {
     }
 
     @DeleteMapping("/{roomID}")
-    public ResponseEntity<Void> deleteRoom(@PathVariable int roomID){
+    public ResponseEntity<Void> deleteRoom(@PathVariable int roomID) {
         roomService.removeRoom(roomID);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{roomID}/bookings")
+    public List<BookingResponse> getRoomsBookings(@PathVariable int roomID) {
+        return bookingService.findBookingsByRoom(roomID);
     }
 }

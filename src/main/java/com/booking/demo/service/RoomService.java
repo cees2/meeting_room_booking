@@ -5,6 +5,7 @@ import com.booking.demo.dto.request.UpdateRoomRequest;
 import com.booking.demo.dto.response.RoomResponse;
 import com.booking.demo.entity.Room;
 import com.booking.demo.mapper.RoomMapper;
+import com.booking.demo.repository.BookingRepository;
 import com.booking.demo.repository.RoomRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
