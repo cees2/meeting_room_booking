@@ -14,6 +14,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -31,8 +32,11 @@ public class BookingService {
         this.bookingMapper = bookingMapper;
     }
 
-    public List<BookingResponse> getAllBookings() {
-        return bookingRepository.findAll().stream().map(bookingMapper::toResponse).toList();
+    public List<BookingResponse> getAllBookings(LocalDateTime startTime, LocalDateTime endTime) {
+        LocalDateTime effectiveStart = startTime != null ? startTime : LocalDateTime.of(1999, 1, 1, 0, 0, 0);
+        LocalDateTime effectiveEnd = endTime != null ? endTime : LocalDateTime.of(2099, 1, 1, 0, 0, 0);
+
+        return bookingRepository.findByStartTimeGreaterThanAndEndTimeLessThan(effectiveStart, effectiveEnd).stream().map(bookingMapper::toResponse).toList();
     }
 
     public BookingResponse getBookingByID(int bookingID) {
@@ -85,13 +89,13 @@ public class BookingService {
         bookingRepository.delete(bookingToBeRemoved);
     }
 
-    public List<BookingResponse> findBookingsByUser(int userID){
+    public List<BookingResponse> findBookingsByUser(int userID) {
         List<Booking> bookings = bookingRepository.findByUserId(userID);
 
         return bookings.stream().map(booking -> bookingMapper.toResponse(booking)).toList();
     }
 
-    public List<BookingResponse> findBookingsByRoom(int userID){
+    public List<BookingResponse> findBookingsByRoom(int userID) {
         List<Booking> bookings = bookingRepository.findByRoomId(userID);
 
         return bookings.stream().map(booking -> bookingMapper.toResponse(booking)).toList();
