@@ -27,8 +27,8 @@ public class BookingController {
     }
 
     @GetMapping
-    public List<BookingResponse> getAllBookings(@RequestParam(required = false) LocalDateTime startDate, @RequestParam(required = false) LocalDateTime endDate){
-        return bookingService.getAllBookings(startDate, endDate);
+    public List<BookingResponse> getAllBookings(@RequestParam(required = false) LocalDateTime startDate, @RequestParam(required = false) LocalDateTime endDate, @RequestParam(required = false) String purpose){
+        return bookingService.getAllBookings(startDate, endDate, purpose);
     }
 
     @GetMapping("/{bookingID}")

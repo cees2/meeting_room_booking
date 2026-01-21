@@ -10,7 +10,9 @@ import com.booking.demo.mapper.BookingMapper;
 import com.booking.demo.repository.BookingRepository;
 import com.booking.demo.repository.RoomRepository;
 import com.booking.demo.repository.UserRepository;
+import com.booking.demo.specification.BookingSpecifications;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,11 +34,19 @@ public class BookingService {
         this.bookingMapper = bookingMapper;
     }
 
-    public List<BookingResponse> getAllBookings(LocalDateTime startTime, LocalDateTime endTime) {
-        LocalDateTime effectiveStart = startTime != null ? startTime : LocalDateTime.of(1999, 1, 1, 0, 0, 0);
-        LocalDateTime effectiveEnd = endTime != null ? endTime : LocalDateTime.of(2099, 1, 1, 0, 0, 0);
+    public List<BookingResponse> getAllBookings(LocalDateTime startTime, LocalDateTime endTime, String purpose) {
+        Specification<Booking> spec = (root, query, cb) -> cb.conjunction();
 
-        return bookingRepository.findByStartTimeGreaterThanAndEndTimeLessThan(effectiveStart, effectiveEnd).stream().map(bookingMapper::toResponse).toList();
+        if(startTime != null){
+            spec = spec.and(BookingSpecifications.startTimeAt(startTime));
+        }
+
+        if(endTime != null){
+            spec = spec.and(BookingSpecifications.endTimeAt(endTime));
+        }
+
+
+        return bookingRepository.findAll(spec).stream().map(bookingMapper::toResponse).toList();
     }
 
     public BookingResponse getBookingByID(int bookingID) {
