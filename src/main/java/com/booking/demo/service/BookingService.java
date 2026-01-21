@@ -45,6 +45,10 @@ public class BookingService {
             spec = spec.and(BookingSpecifications.endTimeAt(endTime));
         }
 
+        if(purpose != null){
+            spec = spec.and(BookingSpecifications.purpose(purpose));
+        }
+
 
         return bookingRepository.findAll(spec).stream().map(bookingMapper::toResponse).toList();
     }

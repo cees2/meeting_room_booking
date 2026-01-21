@@ -15,4 +15,8 @@ public class BookingSpecifications {
         return (root, query, builder) ->
                 builder.lessThanOrEqualTo(root.get("endTime"), endTime);
     }
+
+    public static Specification<Booking> purpose(String purpose){
+        return (root, query, builder) -> builder.equal(root.get("purpose"), purpose);
+    }
 }
