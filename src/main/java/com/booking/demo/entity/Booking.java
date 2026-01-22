@@ -1,5 +1,6 @@
 package com.booking.demo.entity;
 
+import com.booking.demo.enums.BookingStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -18,7 +19,8 @@ public class Booking {
     @Column(name="purpose")
     private String purpose;
     @Column(name="status")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    BookingStatus status;
     @JoinColumn(name="user_id")
     @ManyToOne(optional = false)
     private User user;
@@ -58,11 +60,11 @@ public class Booking {
         this.purpose = purpose;
     }
 
-    public String getStatus() {
+    public BookingStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(BookingStatus status) {
         this.status = status;
     }
 

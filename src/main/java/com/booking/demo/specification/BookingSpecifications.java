@@ -1,6 +1,7 @@
 package com.booking.demo.specification;
 
 import com.booking.demo.entity.Booking;
+import com.booking.demo.enums.BookingStatus;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDateTime;
@@ -18,5 +19,9 @@ public class BookingSpecifications {
 
     public static Specification<Booking> purpose(String purpose){
         return (root, query, builder) -> builder.equal(root.get("purpose"), purpose);
+    }
+
+    public static Specification<Booking> status(BookingStatus status){
+        return (root, query, builder) -> builder.equal(root.get("status"), status);
     }
 }
