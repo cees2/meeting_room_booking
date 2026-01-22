@@ -26,8 +26,12 @@ public class UserController {
     }
 
     @GetMapping
-    public List<UserResponse> getAllUsers() {
-        return userService.getAllUsers();
+    public List<UserResponse> getAllUsers(
+            @RequestParam(required = false) String firstName,
+            @RequestParam(required = false) String lastName,
+            @RequestParam(required = false) String email
+    ) {
+        return userService.getAllUsers(firstName,lastName,email);
     }
 
     @GetMapping("/{userID}")

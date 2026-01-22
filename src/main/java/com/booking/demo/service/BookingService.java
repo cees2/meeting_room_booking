@@ -6,6 +6,7 @@ import com.booking.demo.dto.response.BookingResponse;
 import com.booking.demo.entity.Booking;
 import com.booking.demo.entity.Room;
 import com.booking.demo.entity.User;
+import com.booking.demo.enums.BookingStatus;
 import com.booking.demo.mapper.BookingMapper;
 import com.booking.demo.repository.BookingRepository;
 import com.booking.demo.repository.RoomRepository;
@@ -34,21 +35,38 @@ public class BookingService {
         this.bookingMapper = bookingMapper;
     }
 
-    public List<BookingResponse> getAllBookings(LocalDateTime startTime, LocalDateTime endTime, String purpose) {
+    public List<BookingResponse> getAllBookings(
+            LocalDateTime startTime,
+            LocalDateTime endTime,
+            String purpose,
+            BookingStatus status,
+            Integer userId,
+            Integer roomId) {
         Specification<Booking> spec = (root, query, cb) -> cb.conjunction();
 
-        if(startTime != null){
+        if (startTime != null) {
             spec = spec.and(BookingSpecifications.startTimeAt(startTime));
         }
 
-        if(endTime != null){
+        if (endTime != null) {
             spec = spec.and(BookingSpecifications.endTimeAt(endTime));
         }
 
-        if(purpose != null){
+        if (purpose != null) {
             spec = spec.and(BookingSpecifications.purpose(purpose));
         }
 
+        if (status != null) {
+            spec = spec.and(BookingSpecifications.status(status));
+        }
+
+        if (userId != null){
+            spec = spec.and(BookingSpecifications.user(userId));
+        }
+
+        if (roomId != null){
+            spec = spec.and(BookingSpecifications.room(roomId));
+        }
 
         return bookingRepository.findAll(spec).stream().map(bookingMapper::toResponse).toList();
     }

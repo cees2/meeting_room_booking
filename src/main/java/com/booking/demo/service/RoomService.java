@@ -5,9 +5,10 @@ import com.booking.demo.dto.request.UpdateRoomRequest;
 import com.booking.demo.dto.response.RoomResponse;
 import com.booking.demo.entity.Room;
 import com.booking.demo.mapper.RoomMapper;
-import com.booking.demo.repository.BookingRepository;
 import com.booking.demo.repository.RoomRepository;
+import com.booking.demo.specification.RoomSpecification;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,8 +25,22 @@ public class RoomService {
         this.roomMapper = roomMapper;
     }
 
-    public List<RoomResponse> getRooms() {
-        return roomRepository.findAll().stream().map(roomMapper::toResponse).toList();
+    public List<RoomResponse> getRooms(String name, Integer capacity, String location) {
+        Specification<Room> spec = (root, query, cb) -> cb.conjunction();
+
+        if(name != null){
+            spec = spec.and(RoomSpecification.name(name));
+        }
+
+        if(capacity != null){
+            spec = spec.and(RoomSpecification.capacity(capacity));
+        }
+
+        if(location != null){
+            spec = spec.and(RoomSpecification.location(location));
+        }
+
+        return roomRepository.findAll(spec).stream().map(roomMapper::toResponse).toList();
     }
 
     public RoomResponse getRoomById(int roomID) {

@@ -6,6 +6,7 @@ import com.booking.demo.dto.response.BookingResponse;
 import com.booking.demo.entity.Booking;
 import com.booking.demo.entity.Room;
 import com.booking.demo.entity.User;
+import com.booking.demo.enums.BookingStatus;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -16,7 +17,7 @@ public class BookingMapper {
         Booking booking = new Booking();
         booking.setStartTime(createBookingRequest.startTime());
         booking.setEndTime(createBookingRequest.endTime());
-        booking.setStatus(createBookingRequest.purpose());
+        booking.setPurpose(createBookingRequest.purpose());
         booking.setStatus(createBookingRequest.status());
         booking.setUser(user);
         booking.setRoom(room);
@@ -28,7 +29,7 @@ public class BookingMapper {
         LocalDateTime startTime = createBookingRequest.startTime();
         LocalDateTime endTime = createBookingRequest.endTime();
         String purpose = createBookingRequest.purpose();
-        String status = createBookingRequest.status();
+        BookingStatus status = createBookingRequest.status();
 
         if (startTime != null) bookingToBeUpdated.setStartTime(startTime);
         if (endTime != null) bookingToBeUpdated.setEndTime(endTime);

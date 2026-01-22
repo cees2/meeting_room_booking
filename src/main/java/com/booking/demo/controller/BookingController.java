@@ -4,6 +4,7 @@ import com.booking.demo.dto.request.CreateBookingRequest;
 import com.booking.demo.dto.request.UpdateBookingRequest;
 import com.booking.demo.dto.response.BookingResponse;
 import com.booking.demo.entity.Booking;
+import com.booking.demo.enums.BookingStatus;
 import com.booking.demo.service.BookingService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -22,27 +23,34 @@ public class BookingController {
     }
 
     @PostMapping
-    public BookingResponse createBooking(@Valid @RequestBody CreateBookingRequest createBookingRequest){
+    public BookingResponse createBooking(@Valid @RequestBody CreateBookingRequest createBookingRequest) {
         return bookingService.createBooking(createBookingRequest);
     }
 
     @GetMapping
-    public List<BookingResponse> getAllBookings(@RequestParam(required = false) LocalDateTime startDate, @RequestParam(required = false) LocalDateTime endDate, @RequestParam(required = false) String purpose){
-        return bookingService.getAllBookings(startDate, endDate, purpose);
+    public List<BookingResponse> getAllBookings(
+            @RequestParam(required = false) LocalDateTime startDate,
+            @RequestParam(required = false) LocalDateTime endDate,
+            @RequestParam(required = false) String purpose,
+            @RequestParam(required = false) BookingStatus status,
+            @RequestParam(required = false) Integer userId,
+            @RequestParam(required = false) Integer roomId
+    ) {
+        return bookingService.getAllBookings(startDate, endDate, purpose, status, userId, roomId);
     }
 
     @GetMapping("/{bookingID}")
-    public BookingResponse getBooking(@PathVariable int bookingID){
+    public BookingResponse getBooking(@PathVariable int bookingID) {
         return bookingService.getBookingByID(bookingID);
     }
 
     @PatchMapping("/{bookingID}")
-    public BookingResponse updateBooking(@PathVariable int bookingID, @RequestBody UpdateBookingRequest booking){
+    public BookingResponse updateBooking(@PathVariable int bookingID, @RequestBody UpdateBookingRequest booking) {
         return bookingService.updateBooking(bookingID, booking);
     }
 
     @DeleteMapping("/{bookingID}")
-    public ResponseEntity<Void> updateBooking(@PathVariable int bookingID){
+    public ResponseEntity<Void> updateBooking(@PathVariable int bookingID) {
         bookingService.deleteBooking(bookingID);
 
         return ResponseEntity.noContent().build();

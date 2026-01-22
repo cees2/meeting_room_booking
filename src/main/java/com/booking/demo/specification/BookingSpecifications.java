@@ -24,4 +24,12 @@ public class BookingSpecifications {
     public static Specification<Booking> status(BookingStatus status){
         return (root, query, builder) -> builder.equal(root.get("status"), status);
     }
+
+    public static Specification<Booking> user(Integer userId){
+        return (root, query, builder) -> builder.equal(root.get("user").get("id"), userId);
+    }
+
+    public static Specification<Booking> room(Integer roomId){
+        return (root, query, builder) -> builder.equal(root.get("room").get("id"), roomId);
+    }
 }

@@ -2,6 +2,7 @@ package com.booking.demo.dto.response;
 
 import com.booking.demo.entity.Room;
 import com.booking.demo.entity.User;
+import com.booking.demo.enums.BookingStatus;
 
 import java.time.LocalDateTime;
 
@@ -10,7 +11,7 @@ public record BookingResponse(
         LocalDateTime startTime,
         LocalDateTime endTime,
         String purpose,
-        String status,
+        BookingStatus status,
         User user,
         Room room
 ) {

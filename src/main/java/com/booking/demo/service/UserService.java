@@ -6,9 +6,12 @@ import com.booking.demo.dto.response.UserResponse;
 import com.booking.demo.entity.User;
 import com.booking.demo.mapper.UserMapper;
 import com.booking.demo.repository.UserRepository;
+import com.booking.demo.specification.UserSpecifications;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -22,8 +25,22 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
-    public List<UserResponse> getAllUsers() {
-        return userRepository.findAll().stream().map(userMapper::toResponse).toList();
+    public List<UserResponse> getAllUsers(String firstName, String lastName, String email) {
+        Specification<User> spec = (root, query, builder) -> builder.conjunction();
+
+        if(firstName != null){
+            spec = spec.and(UserSpecifications.firstName(firstName));
+        }
+
+        if(lastName != null){
+            spec = spec.and(UserSpecifications.lastName(lastName));
+        }
+
+        if(email != null){
+            spec = spec.and(UserSpecifications.email(email));
+        }
+
+        return userRepository.findAll(spec).stream().map(userMapper::toResponse).toList();
     }
 
     public UserResponse getUserById(int userID) {

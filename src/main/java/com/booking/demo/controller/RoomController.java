@@ -24,8 +24,12 @@ public class RoomController {
     }
 
     @GetMapping
-    public List<RoomResponse> getAllRooms() {
-        return roomService.getRooms();
+    public List<RoomResponse> getAllRooms(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Integer capacity,
+            @RequestParam(required = false) String location
+    ) {
+        return roomService.getRooms(name, capacity, location);
     }
 
     @GetMapping("/{roomID}")

@@ -1,5 +1,6 @@
 package com.booking.demo.dto.request;
 
+import com.booking.demo.enums.BookingStatus;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
@@ -13,7 +14,7 @@ public record CreateBookingRequest(
         @NotEmpty
         String purpose,
         @NotEmpty
-        String status,
+        BookingStatus status,
         @NotNull
         Integer user_id,
         @NotNull
