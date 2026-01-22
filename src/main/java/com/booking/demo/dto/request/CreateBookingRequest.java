@@ -13,7 +13,7 @@ public record CreateBookingRequest(
         LocalDateTime endTime,
         @NotEmpty
         String purpose,
-        @NotEmpty
+        @NotNull
         BookingStatus status,
         @NotNull
         Integer user_id,

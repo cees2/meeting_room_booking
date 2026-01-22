@@ -7,6 +7,7 @@ import com.booking.demo.entity.Booking;
 import com.booking.demo.entity.Room;
 import com.booking.demo.entity.User;
 import com.booking.demo.enums.BookingStatus;
+import com.booking.demo.exceptions.InvalidBookingDatesException;
 import com.booking.demo.mapper.BookingMapper;
 import com.booking.demo.repository.BookingRepository;
 import com.booking.demo.repository.RoomRepository;
@@ -82,9 +83,17 @@ public class BookingService {
     public BookingResponse createBooking(CreateBookingRequest createBookingRequest) {
         Integer roomID = createBookingRequest.room_id();
         Integer userID = createBookingRequest.user_id();
+        LocalDateTime startTime = createBookingRequest.startTime();
+        LocalDateTime endTime = createBookingRequest.endTime();
+
+        if(startTime.isAfter(endTime)){
+            throw new InvalidBookingDatesException(startTime, endTime);
+        }
 
         Room room = roomRepository.findById(roomID).orElseThrow(() -> new EntityNotFoundException("Could not find the user with ID: " + userID));
         User user = userRepository.findById(userID).orElseThrow(() -> new EntityNotFoundException("Could not find the room with ID: " + roomID));
+
+
 
         Booking bookingToBeCreated = bookingMapper.createBookingFromRequest(createBookingRequest, user, room);
 

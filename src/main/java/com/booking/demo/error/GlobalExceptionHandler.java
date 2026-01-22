@@ -1,5 +1,6 @@
 package com.booking.demo.error;
 
+import com.booking.demo.exceptions.InvalidBookingDatesException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -76,5 +77,12 @@ public class GlobalExceptionHandler {
         ApiError apiError = new ApiError("TYPE_MISMATCH", exception.getMessage());
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiError);
+    }
+
+    @ExceptionHandler(InvalidBookingDatesException.class)
+    public ResponseEntity<ApiError> globalInvalidBookingDatesHandler(InvalidBookingDatesException exception){
+        ApiError apiError = new ApiError("INVALID_BOOKING_DATES", exception.getMessage());
+
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(apiError);
     }
 }
