@@ -7,6 +7,7 @@ import com.booking.demo.entity.Booking;
 import com.booking.demo.entity.Room;
 import com.booking.demo.entity.User;
 import com.booking.demo.enums.BookingStatus;
+import com.booking.demo.exceptions.BookingOverlappingDatesException;
 import com.booking.demo.exceptions.InvalidBookingDatesException;
 import com.booking.demo.mapper.BookingMapper;
 import com.booking.demo.repository.BookingRepository;
@@ -61,11 +62,11 @@ public class BookingService {
             spec = spec.and(BookingSpecifications.status(status));
         }
 
-        if (userId != null){
+        if (userId != null) {
             spec = spec.and(BookingSpecifications.user(userId));
         }
 
-        if (roomId != null){
+        if (roomId != null) {
             spec = spec.and(BookingSpecifications.room(roomId));
         }
 
@@ -86,13 +87,25 @@ public class BookingService {
         LocalDateTime startTime = createBookingRequest.startTime();
         LocalDateTime endTime = createBookingRequest.endTime();
 
-        if(startTime.isAfter(endTime)){
+
+        if (startTime.isAfter(endTime)) {
             throw new InvalidBookingDatesException(startTime, endTime);
+        }
+
+
+        List<Booking> overlappingBookings = bookingRepository.findAll(BookingSpecifications.betweenTimeAt(startTime, endTime));
+
+        System.out.println(overlappingBookings);
+
+        if (!overlappingBookings.isEmpty()) {
+            LocalDateTime overlappedStartTime = overlappingBookings.getFirst().getStartTime();
+            LocalDateTime overlappedEndTime = overlappingBookings.getFirst().getEndTime();
+
+            throw new BookingOverlappingDatesException(createBookingRequest.startTime(), createBookingRequest.endTime(), overlappedStartTime, overlappedEndTime);
         }
 
         Room room = roomRepository.findById(roomID).orElseThrow(() -> new EntityNotFoundException("Could not find the user with ID: " + userID));
         User user = userRepository.findById(userID).orElseThrow(() -> new EntityNotFoundException("Could not find the room with ID: " + roomID));
-
 
 
         Booking bookingToBeCreated = bookingMapper.createBookingFromRequest(createBookingRequest, user, room);
@@ -109,6 +122,8 @@ public class BookingService {
         Integer userID = booking.user_id();
         Room room = null;
         User user = null;
+
+        // TODO: BookingOverlappingDatesException
 
         if (roomID != null) {
             room = roomRepository.findById(roomID).orElseThrow(() -> new EntityNotFoundException("Could not find the user with ID: " + userID));
