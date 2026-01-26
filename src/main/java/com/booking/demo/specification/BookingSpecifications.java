@@ -5,9 +5,6 @@ import com.booking.demo.enums.BookingStatus;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Predicate;
 
 public class BookingSpecifications {
     public static Specification<Booking> startTimeAt(LocalDateTime startTime) {
