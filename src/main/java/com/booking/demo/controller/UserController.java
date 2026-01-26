@@ -9,6 +9,9 @@ import com.booking.demo.service.BookingService;
 import com.booking.demo.service.RoomService;
 import com.booking.demo.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,12 +29,13 @@ public class UserController {
     }
 
     @GetMapping
-    public List<UserResponse> getAllUsers(
+    public Page<UserResponse> getAllUsers(
             @RequestParam(required = false) String firstName,
             @RequestParam(required = false) String lastName,
-            @RequestParam(required = false) String email
+            @RequestParam(required = false) String email,
+            @PageableDefault() Pageable page
     ) {
-        return userService.getAllUsers(firstName,lastName,email);
+        return userService.getAllUsers(firstName,lastName,email, page);
     }
 
     @GetMapping("/{userID}")

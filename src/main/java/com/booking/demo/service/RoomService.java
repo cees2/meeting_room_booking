@@ -8,6 +8,8 @@ import com.booking.demo.mapper.RoomMapper;
 import com.booking.demo.repository.RoomRepository;
 import com.booking.demo.specification.RoomSpecification;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +27,7 @@ public class RoomService {
         this.roomMapper = roomMapper;
     }
 
-    public List<RoomResponse> getRooms(String name, Integer capacity, String location) {
+    public Page<RoomResponse> getRooms(String name, Integer capacity, String location, Pageable page) {
         Specification<Room> spec = (root, query, cb) -> cb.conjunction();
 
         if(name != null){
@@ -40,7 +42,7 @@ public class RoomService {
             spec = spec.and(RoomSpecification.location(location));
         }
 
-        return roomRepository.findAll(spec).stream().map(roomMapper::toResponse).toList();
+        return roomRepository.findAll(spec, page).map(roomMapper::toResponse);
     }
 
     public RoomResponse getRoomById(int roomID) {

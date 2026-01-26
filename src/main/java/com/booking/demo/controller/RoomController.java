@@ -7,6 +7,9 @@ import com.booking.demo.dto.response.RoomResponse;
 import com.booking.demo.service.BookingService;
 import com.booking.demo.service.RoomService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,12 +27,13 @@ public class RoomController {
     }
 
     @GetMapping
-    public List<RoomResponse> getAllRooms(
+    public Page<RoomResponse> getAllRooms(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Integer capacity,
-            @RequestParam(required = false) String location
+            @RequestParam(required = false) String location,
+            @PageableDefault() Pageable page
     ) {
-        return roomService.getRooms(name, capacity, location);
+        return roomService.getRooms(name, capacity, location, page);
     }
 
     @GetMapping("/{roomID}")

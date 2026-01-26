@@ -15,7 +15,8 @@ import com.booking.demo.repository.RoomRepository;
 import com.booking.demo.repository.UserRepository;
 import com.booking.demo.specification.BookingSpecifications;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.cglib.core.Local;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,13 +39,14 @@ public class BookingService {
         this.bookingMapper = bookingMapper;
     }
 
-    public List<BookingResponse> getAllBookings(
+    public Page<BookingResponse> getAllBookings(
             LocalDateTime startTime,
             LocalDateTime endTime,
             String purpose,
             BookingStatus status,
             Integer userId,
-            Integer roomId) {
+            Integer roomId,
+            Pageable page) {
         Specification<Booking> spec = (root, query, cb) -> cb.conjunction();
 
         if (startTime != null) {
@@ -71,7 +73,7 @@ public class BookingService {
             spec = spec.and(BookingSpecifications.room(roomId));
         }
 
-        return bookingRepository.findAll(spec).stream().map(bookingMapper::toResponse).toList();
+        return bookingRepository.findAll(spec,page).map(bookingMapper::toResponse);
     }
 
     public BookingResponse getBookingByID(int bookingID) {

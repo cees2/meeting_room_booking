@@ -8,6 +8,8 @@ import com.booking.demo.mapper.UserMapper;
 import com.booking.demo.repository.UserRepository;
 import com.booking.demo.specification.UserSpecifications;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +27,7 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
-    public List<UserResponse> getAllUsers(String firstName, String lastName, String email) {
+    public Page<UserResponse> getAllUsers(String firstName, String lastName, String email, Pageable page) {
         Specification<User> spec = (root, query, builder) -> builder.conjunction();
 
         if(firstName != null){
@@ -40,7 +42,7 @@ public class UserService {
             spec = spec.and(UserSpecifications.email(email));
         }
 
-        return userRepository.findAll(spec).stream().map(userMapper::toResponse).toList();
+        return userRepository.findAll(spec, page).map(userMapper::toResponse);
     }
 
     public UserResponse getUserById(int userID) {
