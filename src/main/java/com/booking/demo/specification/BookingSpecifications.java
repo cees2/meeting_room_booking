@@ -5,6 +5,9 @@ import com.booking.demo.enums.BookingStatus;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
 
 public class BookingSpecifications {
     public static Specification<Booking> startTimeAt(LocalDateTime startTime) {
@@ -17,12 +20,22 @@ public class BookingSpecifications {
                 builder.lessThanOrEqualTo(root.get("endTime"), endTime);
     }
 
-    public static Specification<Booking> betweenTimeAt(LocalDateTime starTime, LocalDateTime endTime) {
-        return (root, query, builder) -> builder.and(
-                builder.greaterThanOrEqualTo(root.get("startTime"), starTime),
-                builder.lessThanOrEqualTo(root.get("endTime"), endTime)
+    public static Specification<Booking> roomAndBetweenTimeAt(LocalDateTime starTime, LocalDateTime endTime, Integer roomID) {
+        Specification<Booking> spec = (root, query, builder) -> builder.conjunction();
 
-        );
+        if(starTime != null){
+            spec = spec.and((root, query, builder) -> builder.greaterThan(root.get("endTime"), starTime));
+        }
+
+        if(endTime != null){
+            spec = spec.and((root, query, builder) -> builder.lessThan(root.get("startTime"), endTime));
+        }
+
+        if(roomID != null){
+            spec = spec.and((root, query, builder) -> builder.equal(root.get("room").get("id"), roomID));
+        }
+
+        return spec;
     }
 
     public static Specification<Booking> purpose(String purpose) {
@@ -40,6 +53,4 @@ public class BookingSpecifications {
     public static Specification<Booking> room(Integer roomId) {
         return (root, query, builder) -> builder.equal(root.get("room").get("id"), roomId);
     }
-
-
 }

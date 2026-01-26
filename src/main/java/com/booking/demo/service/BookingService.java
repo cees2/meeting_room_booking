@@ -15,6 +15,7 @@ import com.booking.demo.repository.RoomRepository;
 import com.booking.demo.repository.UserRepository;
 import com.booking.demo.specification.BookingSpecifications;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -87,21 +88,18 @@ public class BookingService {
         LocalDateTime startTime = createBookingRequest.startTime();
         LocalDateTime endTime = createBookingRequest.endTime();
 
-
         if (startTime.isAfter(endTime)) {
             throw new InvalidBookingDatesException(startTime, endTime);
         }
 
-
-        List<Booking> overlappingBookings = bookingRepository.findAll(BookingSpecifications.betweenTimeAt(startTime, endTime));
-
-        System.out.println(overlappingBookings);
+        List<Booking> overlappingBookings = bookingRepository.findAll(BookingSpecifications.roomAndBetweenTimeAt(startTime, endTime, roomID));
 
         if (!overlappingBookings.isEmpty()) {
             LocalDateTime overlappedStartTime = overlappingBookings.getFirst().getStartTime();
             LocalDateTime overlappedEndTime = overlappingBookings.getFirst().getEndTime();
+            Room overlappedRoom = roomRepository.findById(roomID).orElseThrow(() -> new EntityNotFoundException("Could not find room user with ID: " + roomID));
 
-            throw new BookingOverlappingDatesException(createBookingRequest.startTime(), createBookingRequest.endTime(), overlappedStartTime, overlappedEndTime);
+            throw new BookingOverlappingDatesException(createBookingRequest.startTime(), createBookingRequest.endTime(), overlappedStartTime, overlappedEndTime, overlappedRoom.getName());
         }
 
         Room room = roomRepository.findById(roomID).orElseThrow(() -> new EntityNotFoundException("Could not find the user with ID: " + userID));
@@ -120,10 +118,20 @@ public class BookingService {
         Booking bookingToBeUpdated = bookingRepository.findById(bookingID).orElseThrow(() -> new EntityNotFoundException("Could not find the booking with given ID"));
         Integer roomID = booking.room_id();
         Integer userID = booking.user_id();
+        LocalDateTime startTime = booking.startTime();
+        LocalDateTime endTime = booking.endTime();
         Room room = null;
         User user = null;
 
-        // TODO: BookingOverlappingDatesException
+        List<Booking> overlappingBookings = bookingRepository.findAll(BookingSpecifications.roomAndBetweenTimeAt(startTime, endTime, roomID));
+
+        if (!overlappingBookings.isEmpty()) {
+            LocalDateTime overlappedStartTime = overlappingBookings.getFirst().getStartTime();
+            LocalDateTime overlappedEndTime = overlappingBookings.getFirst().getEndTime();
+            Room overlappedRoom = roomRepository.findById(roomID).orElseThrow(() -> new EntityNotFoundException("Could not find room user with ID: " + roomID));
+
+            throw new BookingOverlappingDatesException(booking.startTime(), booking.endTime(), overlappedStartTime, overlappedEndTime, overlappedRoom.getName());
+        }
 
         if (roomID != null) {
             room = roomRepository.findById(roomID).orElseThrow(() -> new EntityNotFoundException("Could not find the user with ID: " + userID));

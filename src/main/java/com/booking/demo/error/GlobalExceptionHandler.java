@@ -1,5 +1,6 @@
 package com.booking.demo.error;
 
+import com.booking.demo.exceptions.BookingOverlappingDatesException;
 import com.booking.demo.exceptions.InvalidBookingDatesException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
@@ -82,6 +83,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidBookingDatesException.class)
     public ResponseEntity<ApiError> globalInvalidBookingDatesHandler(InvalidBookingDatesException exception){
         ApiError apiError = new ApiError("INVALID_BOOKING_DATES", exception.getMessage());
+
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(apiError);
+    }
+
+    @ExceptionHandler(BookingOverlappingDatesException.class)
+    public ResponseEntity<ApiError> globalBookingOverlappingDatesException(BookingOverlappingDatesException exception){
+        ApiError apiError = new ApiError("OVERLAPPING_BOOKING_DATES", exception.getMessage());
 
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(apiError);
     }
